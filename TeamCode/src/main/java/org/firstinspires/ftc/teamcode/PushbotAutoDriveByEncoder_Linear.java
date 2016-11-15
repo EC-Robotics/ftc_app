@@ -139,9 +139,9 @@ public class PushbotAutoDriveByEncoder_Linear extends LinearOpMode {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED,  1000000000,  1000000000, 100000000.0);  // S1: Forward 47 Inches with 5 Sec timeout
-       /* encoderDrive(TURN_SPEED,   12, -12, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
-        encoderDrive(DRIVE_SPEED, -24, -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout*/
+        encoderDrive(DRIVE_SPEED,  48,  48, 10.0);  // S1: Forward 47 Inches with 5 Sec timeout
+        encoderDrive(TURN_SPEED,   14.85, -14.85, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
+        //encoderDrive(DRIVE_SPEED, -24, -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
 
         //robot.leftClaw.setPosition(1.0);            // S4: Stop and close the claw.
         //robot.rightClaw.setPosition(0.0);
@@ -192,7 +192,7 @@ public class PushbotAutoDriveByEncoder_Linear extends LinearOpMode {
                 angleZ = gyro.getIntegratedZValue();
                 zVal = gyro.rawZ();
 
-                double adjustment = (angleZ)/25;
+                double adjustment = (angleZ)/25.0;
                 leftMotor.setPower(Math.abs(speed) - adjustment);
                 rightMotor.setPower(Math.abs(speed) + adjustment);
 
