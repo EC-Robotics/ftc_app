@@ -59,6 +59,7 @@ public class TemplateOpMode_Linear extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     DcMotor leftMotor = null;
     DcMotor rightMotor = null;
+    DcMotor pullyMoter = null;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -72,7 +73,7 @@ public class TemplateOpMode_Linear extends LinearOpMode {
         leftMotor  = hardwareMap.dcMotor.get("leftMotor");
         rightMotor = hardwareMap.dcMotor.get("rightMotor");
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
-
+        pullyMoter = hardwareMap.dcMotor.get("pullyMotor");
         // eg: Set the drive motor directions:
         // "Reverse" the motor that runs backwards when connected directly to the battery
         // leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
@@ -90,6 +91,23 @@ public class TemplateOpMode_Linear extends LinearOpMode {
             // eg: Run wheels in tank mode (note: The joystick goes negative when pushed forwards)
             leftMotor.setPower(-gamepad1.left_stick_y);
             rightMotor.setPower(-gamepad1.right_stick_y);
+
+
+
+
+            if(gamepad2.a)
+                pullyMoter.setPower(1);
+            else if (gamepad2.y)
+                pullyMoter.setPower(-1);
+            else
+                pullyMoter.setPower(0);
+
+
+
+
+
+
+
 
             idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
         }
