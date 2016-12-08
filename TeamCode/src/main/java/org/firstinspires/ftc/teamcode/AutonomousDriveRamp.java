@@ -78,8 +78,9 @@ public class AutonomousDriveRamp extends LinearOpMode {
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
                                                       (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 0.3;
+    static final double     DRIVE_SPEED             = 0.6;
     static final double     TURN_SPEED              = 0.5;
+    static final double     IN_PER_DEGREE           = 14.85 / 90;
 
     DcMotor rightMotor;
     DcMotor leftMotor;
@@ -139,9 +140,10 @@ public class AutonomousDriveRamp extends LinearOpMode {
 
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
 
-
-        encoderDrive(DRIVE_SPEED,  80,  80, 3.0);  // S1: Forward 47 Inches with 5 Sec timeout
-
+        //Make sure to start at an angle, parallel to the red and blue line, near the ramp
+        encoderDrive(DRIVE_SPEED,  48,  48, 4.0);  // S1: Forward 47 Inches with 5 Sec timeout
+        encoderDrive(TURN_SPEED,   IN_PER_DEGREE * 90, IN_PER_DEGREE * -90, 4.0); //Turn 135 degrees to the left
+        encoderDrive(DRIVE_SPEED,  40,  40, 4.0);
 
         //encoderDrive(TURN_SPEED,   14.85, -14.85, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
         //encoderDrive(DRIVE_SPEED, -24, -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
