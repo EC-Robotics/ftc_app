@@ -65,9 +65,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Autonomous Drive Ramp Blue", group="Pushbot")
+@Autonomous(name="Autonomous Drive Ramp Red", group="Pushbot")
 //@Disabled
-public class AutonomousDriveRamp extends LinearOpMode {
+public class AutonomousDriveRampRed extends LinearOpMode {
 
     /* Declare OpMode members. */
     //HardwarePushbot         robot   = new HardwarePushbot();   // Use a Pushbot's hardware
@@ -143,7 +143,7 @@ public class AutonomousDriveRamp extends LinearOpMode {
         //Make sure to start at an angle, parallel to the red and blue line, near the ramp
         encoderDrive(DRIVE_SPEED,  48,  48, 4.0);  // S1: Forward 47 Inches with 5 Sec timeout
 
-        encoderDrive(TURN_SPEED,   IN_PER_DEGREE * 90, IN_PER_DEGREE * -90, 4.0); //Turn 135 degrees to the lef
+        encoderDrive(TURN_SPEED,   IN_PER_DEGREE * -90, IN_PER_DEGREE * 90, 4.0); //Turn 135 degrees to the lef
 
         encoderDrive(DRIVE_SPEED,  50,  50, 4.0);
 

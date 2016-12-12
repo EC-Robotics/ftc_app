@@ -72,7 +72,7 @@ public class TemplateOpMode_Linear extends LinearOpMode {
          */
         leftMotor  = hardwareMap.dcMotor.get("leftMotor");
         rightMotor = hardwareMap.dcMotor.get("rightMotor");
-        leftMotor.setDirection(DcMotor.Direction.REVERSE);
+        rightMotor.setDirection(DcMotor.Direction.REVERSE);
         pullyMoter = hardwareMap.dcMotor.get("pullyMotor");
         // eg: Set the drive motor directions:
         // "Reverse" the motor that runs backwards when connected directly to the battery
