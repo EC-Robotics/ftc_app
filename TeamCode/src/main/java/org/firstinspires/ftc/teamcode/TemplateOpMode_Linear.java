@@ -59,7 +59,8 @@ public class TemplateOpMode_Linear extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     DcMotor leftMotor = null;
     DcMotor rightMotor = null;
-    DcMotor pullyMoter = null;
+    DcMotor pullyMotor = null;
+    DcMotor pullyMotor2 = null;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -73,7 +74,10 @@ public class TemplateOpMode_Linear extends LinearOpMode {
         leftMotor  = hardwareMap.dcMotor.get("leftMotor");
         rightMotor = hardwareMap.dcMotor.get("rightMotor");
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
-        pullyMoter = hardwareMap.dcMotor.get("pullyMotor");
+        pullyMotor = hardwareMap.dcMotor.get("pullyMotor");
+        pullyMotor2 = hardwareMap.dcMotor.get("pullyMotor2");
+        pullyMotor2.setDirection(DcMotor.Direction.REVERSE);
+
         // eg: Set the drive motor directions:
         // "Reverse" the motor that runs backwards when connected directly to the battery
         // leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
@@ -105,12 +109,19 @@ public class TemplateOpMode_Linear extends LinearOpMode {
 
 
 
-            if(gamepad2.a)
-                pullyMoter.setPower(1);
-            else if (gamepad2.y)
-                pullyMoter.setPower(-1);
-            else
-                pullyMoter.setPower(0);
+            if(gamepad2.a) {
+                pullyMotor.setPower(1);
+                pullyMotor2.setPower(1);
+            }
+            else if (gamepad2.y) {
+                 pullyMotor.setPower(-1);
+                 pullyMotor2.setPower(-1);
+            }
+            else {
+                pullyMotor.setPower(0);
+                pullyMotor2.setPower(0);
+            }
+
 
 
 
