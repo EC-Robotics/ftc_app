@@ -36,7 +36,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
@@ -60,6 +62,9 @@ public class TemplateOpMode_Linear extends LinearOpMode {
     DcMotor leftMotor = null;
     DcMotor rightMotor = null;
     DcMotor pullyMoter = null;
+    Servo leftBumper = null;
+    Servo rightBumper = null;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -74,6 +79,14 @@ public class TemplateOpMode_Linear extends LinearOpMode {
         rightMotor = hardwareMap.dcMotor.get("rightMotor");
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
         pullyMoter = hardwareMap.dcMotor.get("pullyMotor");
+
+        leftBumper = hardwareMap.servo.get("leftBumper");
+        rightBumper = hardwareMap.servo.get("rightBumper");
+
+        leftBumper.setPosition(Servo.MIN_POSITION);
+        rightBumper.setPosition(Servo.MIN_POSITION);
+
+
         // eg: Set the drive motor directions:
         // "Reverse" the motor that runs backwards when connected directly to the battery
         // leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
@@ -87,6 +100,8 @@ public class TemplateOpMode_Linear extends LinearOpMode {
         while (opModeIsActive()) {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
+
+
 
             float rightMotorSpeed = gamepad1.right_stick_y;
             float leftMotorSpeed = gamepad1.left_stick_y;
@@ -113,8 +128,20 @@ public class TemplateOpMode_Linear extends LinearOpMode {
                 pullyMoter.setPower(0);
 
 
+            //Extends the servo arms out
+            if(gamepad2.left_bumper)
+                leftBumper.setPosition(Servo.MAX_POSITION);
+
+            if(gamepad2.right_bumper)
+                rightBumper.setPosition(Servo.MAX_POSITION);
 
 
+            //Retracts the servo arms
+            if(gamepad2.left_trigger > 0)
+                leftBumper.setPosition(Servo.MIN_POSITION);
+
+            if(gamepad2.right_trigger > 0)
+                rightBumper.setPosition(Servo.MIN_POSITION);
 
 
 
