@@ -61,7 +61,8 @@ public class TemplateOpMode_Linear extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     DcMotor leftMotor = null;
     DcMotor rightMotor = null;
-    DcMotor pullyMoter = null;
+    DcMotor pullyMotor = null;
+    DcMotor pullyMotor2 = null;
     Servo leftBumper = null;
     Servo rightBumper = null;
 
@@ -78,7 +79,9 @@ public class TemplateOpMode_Linear extends LinearOpMode {
         leftMotor  = hardwareMap.dcMotor.get("leftMotor");
         rightMotor = hardwareMap.dcMotor.get("rightMotor");
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
-        pullyMoter = hardwareMap.dcMotor.get("pullyMotor");
+        pullyMotor = hardwareMap.dcMotor.get("pullyMotor");
+        pullyMotor2 = hardwareMap.dcMotor.get("pullyMotor2");
+        pullyMotor2.setDirection(DcMotor.Direction.REVERSE);
 
         leftBumper = hardwareMap.servo.get("leftBumper");
         rightBumper = hardwareMap.servo.get("rightBumper");
@@ -120,14 +123,16 @@ public class TemplateOpMode_Linear extends LinearOpMode {
 
 
 
-            if(gamepad2.a)
-                pullyMoter.setPower(1);
-            else if (gamepad2.y)
-                pullyMoter.setPower(-1);
-            else
-                pullyMoter.setPower(0);
-
-
+            if(gamepad2.a) {
+                pullyMotor.setPower(1);
+                pullyMotor2.setPower(1);
+            }else if (gamepad2.y) {
+                pullyMotor.setPower(-1);
+                pullyMotor2.setPower(-1);
+            }else {
+                pullyMotor.setPower(0);
+                pullyMotor2.setPower(0);
+            }
             //Extends the servo arms out
             if(gamepad2.left_bumper)
                 leftBumper.setPosition(Servo.MAX_POSITION);

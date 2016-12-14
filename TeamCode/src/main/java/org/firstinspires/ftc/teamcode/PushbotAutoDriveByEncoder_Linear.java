@@ -37,6 +37,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
@@ -87,6 +88,9 @@ public class PushbotAutoDriveByEncoder_Linear extends LinearOpMode {
     DcMotor rightMotor;
     DcMotor leftMotor;
 
+    Servo leftBumper;
+    Servo rightBumper;
+
     ModernRoboticsI2cGyro gyro;
 
     public static int zVal = 0;     // Gyro rate Values
@@ -103,7 +107,11 @@ public class PushbotAutoDriveByEncoder_Linear extends LinearOpMode {
         //robot.init(hardwareMap);
         rightMotor = hardwareMap.dcMotor.get("rightMotor");
         leftMotor = hardwareMap.dcMotor.get("leftMotor");
+
+
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
+
+
 
         gyro = (ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("gyro");
 
@@ -174,6 +182,8 @@ public class PushbotAutoDriveByEncoder_Linear extends LinearOpMode {
             newRightTarget = rightMotor.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
             leftMotor.setTargetPosition(newLeftTarget);
             rightMotor.setTargetPosition(newRightTarget);
+
+
 
             // Turn On RUN_TO_POSITION
             leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
