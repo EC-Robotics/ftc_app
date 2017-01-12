@@ -120,10 +120,7 @@ public class SensorMRColorLineFollowing extends LinearOpMode {
 
       // convert the RGB values to HSV values.
       Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
-      if(!hitLine) {
-        leftMotor.setPower(speed);
-        rightMotor.setPower(speed);
-      }
+
 
 
 
@@ -139,15 +136,21 @@ public class SensorMRColorLineFollowing extends LinearOpMode {
         hitLine = true;
       }
 
-      if (hitLine) {
-        if (colorSensor.alpha() <= 5) {
-          leftMotor.setPower(-turnSpeed);
+
+        if (colorSensor.alpha() <= 14 && hitLine) {
+          leftMotor.setPower(turnSpeed - 0.35);
+          rightMotor.setPower(turnSpeed + 0.2);
+        }/* else if(colorSensor.alpha() > 14 && colorSensor.alpha() < 20 && hitLine) {
+          leftMotor.setPower(turnSpeed);
           rightMotor.setPower(turnSpeed);
+        }*/ else if(colorSensor.alpha() > 14 && hitLine) {
+          leftMotor.setPower(turnSpeed + 0.2);
+          rightMotor.setPower(turnSpeed - 0.35);
         } else {
           leftMotor.setPower(speed);
           rightMotor.setPower(speed);
         }
-      }
+
 
       // change the background color to match the color detected by the RGB sensor.
       // pass a reference to the hue, saturation, and value array as an argument

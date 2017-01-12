@@ -63,8 +63,12 @@ public class TemplateOpMode_Linear extends LinearOpMode {
     DcMotor rightMotor = null;
     DcMotor pullyMotor = null;
     DcMotor pullyMotor2 = null;
+    //DcMotor catapult;
+
     Servo leftBumper = null;
     Servo rightBumper = null;
+   // Servo Switch;
+
 
 
     @Override
@@ -85,9 +89,11 @@ public class TemplateOpMode_Linear extends LinearOpMode {
 
         leftBumper = hardwareMap.servo.get("leftBumper");
         rightBumper = hardwareMap.servo.get("rightBumper");
+       // Switch = hardwareMap.servo.get("switch");
 
         leftBumper.setPosition(Servo.MIN_POSITION);
         rightBumper.setPosition(Servo.MIN_POSITION);
+       // Switch.setPosition(Servo.MAX_POSITION);
 
 
         // eg: Set the drive motor directions:
@@ -147,6 +153,10 @@ public class TemplateOpMode_Linear extends LinearOpMode {
 
             if(gamepad2.right_trigger > 0)
                 rightBumper.setPosition(Servo.MIN_POSITION);
+
+            /*if(gamepad1.a) {
+                catapult.setPower(1);
+            }*/
 
 
 
