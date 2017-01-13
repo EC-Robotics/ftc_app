@@ -60,7 +60,10 @@ public class SensorMRColorLineFollowing extends LinearOpMode {
 
   ColorSensor colorSensor;    // Hardware Device Object
   public final static double speed = 0.3;
-  public final static double turnSpeed = 0.4;
+  public final static double turnSpeed = 0.2;   // Was .4, should be calibrated to produce fastest speed that follows smoothly
+  public final static int WHITE = 20;			// The max value reported by the color sensor alpha, should be calibrated
+  public final static int BLACK = 0;			// The min value, should be calibrated.
+  public final static int WHITE_THRESHOLD = (WHITE + BLACK) / 2;
 
 
   @Override
@@ -78,10 +81,6 @@ public class SensorMRColorLineFollowing extends LinearOpMode {
     // get a reference to the RelativeLayout so we can change the background
     // color of the Robot Controller app to match the hue detected by the RGB sensor.
     final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(R.id.RelativeLayout);
-
-    // bPrevState and bCurrState represent the previous and current state of the button.
-    boolean bPrevState = false;
-    boolean bCurrState = false;
 
     boolean hitLine = false;
 
@@ -104,25 +103,8 @@ public class SensorMRColorLineFollowing extends LinearOpMode {
     // Note we use opModeIsActive() as our loop condition because it is an interruptible method.
     while (opModeIsActive()) {
 
-      // check the status of the x button on either gamepad.
-      bCurrState = gamepad1.x;
-
-      // check for button state transitions.
-      if ((bCurrState == true) && (bCurrState != bPrevState))  {
-
-        // button is transitioning to a pressed state. So Toggle LED
-        bLedOn = !bLedOn;
-        colorSensor.enableLed(bLedOn);
-      }
-
-      // update previous state variable.
-      bPrevState = bCurrState;
-
       // convert the RGB values to HSV values.
       Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
-
-
-
 
       // send the info back to driver station using telemetry function.
       telemetry.addData("LED", bLedOn ? "On" : "Off");
@@ -132,20 +114,24 @@ public class SensorMRColorLineFollowing extends LinearOpMode {
       telemetry.addData("Blue ", colorSensor.blue());
       telemetry.addData("Hue", hsvValues[0]);
 
-      if (colorSensor.alpha() > 5) {
+      if (colorSensor.alpha() > WHITE_THRESHOLD /* 5 */) {
         hitLine = true;
       }
 
 
-        if (colorSensor.alpha() <= 14 && hitLine) {
-          leftMotor.setPower(turnSpeed - 0.35);
-          rightMotor.setPower(turnSpeed + 0.2);
+        if (colorSensor.alpha() <= WHITE_THRESHOLD && hitLine) {
+          //leftMotor.setPower(turnSpeed - 0.35);
+          //rightMotor.setPower(turnSpeed + 0.2);
+          leftMotor.setPower(turnSpeed);
+          rightMotor.setPower(0);
         }/* else if(colorSensor.alpha() > 14 && colorSensor.alpha() < 20 && hitLine) {
           leftMotor.setPower(turnSpeed);
           rightMotor.setPower(turnSpeed);
-        }*/ else if(colorSensor.alpha() > 14 && hitLine) {
-          leftMotor.setPower(turnSpeed + 0.2);
-          rightMotor.setPower(turnSpeed - 0.35);
+        }*/ else if(colorSensor.alpha() > WHITE_THRESHOLD && hitLine) {
+          //leftMotor.setPower(turnSpeed + 0.2);
+          //rightMotor.setPower(turnSpeed - 0.35);
+          leftMotor.setPower(0);
+          rightMotor.setPower(turnSpeed);
         } else {
           leftMotor.setPower(speed);
           rightMotor.setPower(speed);
