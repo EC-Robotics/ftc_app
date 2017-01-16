@@ -36,6 +36,7 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -66,30 +67,33 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Autonomous Drive Ramp Red", group="Pushbot")
+@Autonomous(name="Launch Ball Red and Park on Ramp (NO)", group="Pushbot")
 //@Disabled
-public class AutonomousDriveRampRed extends LinearOpMode {
+public class LaunchBallAndRampRed extends LinearOpMode {
 
     /* Declare OpMode members. */
     //HardwarePushbot         robot   = new HardwarePushbot();   // Use a Pushbot's hardware
     private ElapsedTime     runtime = new ElapsedTime();
 
     static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 0.6 ;     // This is < 1.0 if geared UP Old .95
+    static final double     DRIVE_GEAR_REDUCTION    = 0.6 ;     // This is < 1.0 if geared UP Old .6
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
                                                       (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double     DRIVE_SPEED             = 0.6;
-    static final double     TURN_SPEED              = 0.2; // Old .5 Then .3
+    static final double     TURN_SPEED              = 0.3; // Old .5 Then .3
     static final double     IN_PER_DEGREE           = 14.85 / 45;
 
     DcMotor rightMotor;
     DcMotor leftMotor;
 
+    Servo latch;
+
     ModernRoboticsI2cGyro gyro;
 
     public static int zVal = 0;     // Gyro rate Values
     public static int angleZ = 0;
+
 
     static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
     static final double     P_TURN_COEFF            = 0.1;
@@ -108,6 +112,10 @@ public class AutonomousDriveRampRed extends LinearOpMode {
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
 
         gyro = (ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("gyro");
+
+        latch =  hardwareMap.servo.get("latch");
+
+        latch.setPosition(Servo.MAX_POSITION);
 
         telemetry.addData(">", "Gyro Calibrating. Do Not move!");
         telemetry.update();
@@ -145,13 +153,16 @@ public class AutonomousDriveRampRed extends LinearOpMode {
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
 
         //Make sure to start at an angle, parallel to the red and blue line, near the ramp
-        encoderDrive(DRIVE_SPEED,  48,  48, 4.0);  // S1: Forward 47 Inches with 5 Sec timeout
+        encoderDrive(DRIVE_SPEED,  48,  48, 7.0);  // S1: Forward 47 Inches with 5 Sec timeout
 
-        //encoderDrive(TURN_SPEED,   IN_PER_DEGREE * -90, IN_PER_DEGREE * 90, 4.0); //Turn 135 degrees to the lef
+        //encoderDrive(TURN_SPEED,   IN_PER_DEGREE * 90, IN_PER_DEGREE * -90, 4.0); //Turn 135 degrees to the lef
+
+        latch.setPosition(Servo.MIN_POSITION);
+        wait(1000);
 
         gyroTurn(TURN_SPEED, 90);
 
-        encoderDrive(DRIVE_SPEED,  50,  50, 4.0);
+        encoderDrive(DRIVE_SPEED, 15, 15, 10);
 
         //encoderDrive(TURN_SPEED,   14.85, -14.85, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
         //encoderDrive(DRIVE_SPEED, -24, -24, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
@@ -266,6 +277,7 @@ public class AutonomousDriveRampRed extends LinearOpMode {
         telemetry.addData("Target", "%5.2f", angle);
         telemetry.addData("Err/St", "%5.2f/%5.2f", error, steer);
         telemetry.addData("Speed.", "%5.2f:%5.2f", leftSpeed, rightSpeed);
+        telemetry.addData("Gyro Z value: ", "%5.2f", (float) gyro.getIntegratedZValue());
 
         return onTarget;
     }
@@ -289,7 +301,6 @@ public class AutonomousDriveRampRed extends LinearOpMode {
             throws InterruptedException {
 
         angle *= -1;
-
         // keep looping while we are still active, and not on heading.
         while (opModeIsActive() && !onHeading(speed, angle, P_TURN_COEFF)) {
             // Update telemetry & Allow time for other processes to run.

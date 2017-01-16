@@ -67,8 +67,10 @@ public class TemplateOpMode_Linear extends LinearOpMode {
 
     Servo leftBumper = null;
     Servo rightBumper = null;
+    Servo dankServoLeft;
+    Servo dankServoRight;
+    Servo latch;
    // Servo Switch;
-
 
 
     @Override
@@ -89,10 +91,16 @@ public class TemplateOpMode_Linear extends LinearOpMode {
 
         leftBumper = hardwareMap.servo.get("leftBumper");
         rightBumper = hardwareMap.servo.get("rightBumper");
+        dankServoLeft = hardwareMap.servo.get("servoLeft");
+        dankServoRight = hardwareMap.servo.get("servoRightr");
+        latch = hardwareMap.servo.get("latch");
        // Switch = hardwareMap.servo.get("switch");
 
         leftBumper.setPosition(Servo.MIN_POSITION);
         rightBumper.setPosition(Servo.MIN_POSITION);
+        dankServoLeft.setPosition(Servo.MIN_POSITION);
+        dankServoRight.setPosition(Servo.MAX_POSITION);
+        latch.setPosition(Servo.MAX_POSITION);
        // Switch.setPosition(Servo.MAX_POSITION);
 
 
@@ -154,6 +162,19 @@ public class TemplateOpMode_Linear extends LinearOpMode {
             if(gamepad2.right_trigger > 0)
                 rightBumper.setPosition(Servo.MIN_POSITION);
 
+            if(gamepad1.a) {
+                dankServoLeft.setPosition(Servo.MAX_POSITION);
+                dankServoRight.setPosition(Servo.MIN_POSITION);
+            }
+            if(gamepad1.y) {
+                dankServoLeft.setPosition(Servo.MIN_POSITION);
+                dankServoRight.setPosition(Servo.MAX_POSITION);
+            }
+
+            if(gamepad2.x) {
+                latch.setPosition(Servo.MIN_POSITION);
+            }
+
             /*if(gamepad1.a) {
                 catapult.setPower(1);
             }*/
@@ -168,8 +189,10 @@ public class TemplateOpMode_Linear extends LinearOpMode {
     }
 
     double scaleInput(double dVal)  {
-        double[] scaleArray = { 0.0, 0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.24,
-                0.30, 0.36, 0.43, 0.50, 0.60, 0.72, 0.85, 1.00, 1.00 };
+        double[] scaleArray = { 0.0, 0.1, 0.18, 0.25, 0.3, 0.35, 0.4,
+                0.45, 0.5, 0.6, 0.65, 0.7, 0.75, 0.8, .9,  1.00,  1.00 };
+/*        double[] scaleArray = { 0.0, 0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.24,
+                0.30, 0.36, 0.43, 0.50, 0.60, 0.72, 0.85, 1.00, 1.00 };*/
 
         // get the corresponding index for the scaleInput array.
         int index = (int) (dVal * 16.0);
